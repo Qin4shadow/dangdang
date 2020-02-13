@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ql.dao.BookDao">
+
+	<!-- 手动映射 -->
+	<resultMap type="com.baizhi.ql.entity.Book" id="myBook">
+		<id column="id" property="id"/>
+		<result column="book_name" property="bookName"/>
+		<result column="author" property="author"/>
+		<result column="price" property="price"/>
+		<result column="dd_price" property="ddPrice"/>
+		<result column="company" property="company"/>
+		<result column="publish_time" property="publishTime"/>
+		<result column="public_count" property="publicCount"/>
+		<result column="isbn" property="isbn"/>
+		<result column="print_time" property="printTime"/>
+		<result column="print_count" property="printCount"/>
+		<result column="sale_count" property="saleCount"/>
+		<result column="cate_id" property="cateId"/>
+		<result column="e_recommend" property="eRecommend"/>
+		<result column="src" property="src"/>
+		<result column="stock" property="stock"/>
+		<result column="edition" property="edition"/>
+		<result column="impression" property="impression"/>
+		<result column="format" property="format"/>
+		<result column="paper" property="paper"/>
+		<result column="packaging" property="packaging"/>
+		<result column="pagination" property="pagination"/>
+		<result column="recom" property="recom"/>
+		<result column="brief" property="brief"/>
+		<result column="about_author" property="aboutAuthor"/>
+		<result column="directory" property="directory"/>
+		<result column="media" property="media"/>
+		<association property="category" javaType="com.baizhi.ql.entity.Category">
+			<id column="Id1" property="id" />
+			<result column="cateName1" property="cateName"/>
+			<result column="count1" property="count"/>
+			<result column="parentId1" property="parentId"/>
+			<result column="levels1" property="levels"/>
+		<association property="category" javaType="com.baizhi.ql.entity.Category">
+			<id column="Id2" property="id" />
+			<result column="cateName2" property="cateName"/>
+			<result column="count2" property="count"/>
+			<result column="parentId2" property="parentId"/>
+			<result column="levels2" property="levels"/>
+		</association>
+		</association>
+	</resultMap>
+	<!-- 手动映射2 -->
+	<resultMap type="com.baizhi.ql.entity.Book" id="myBook2">
+		<id column="id" property="id"/>
+		<result column="book_name" property="bookName"/>
+		<result column="author" property="author"/>
+		<result column="price" property="price"/>
+		<result column="dd_price" property="ddPrice"/>
+		<result column="company" property="company"/>
+		<result column="publish_time" property="publishTime"/>
+		<result column="public_count" property="publicCount"/>
+		<result column="isbn" property="isbn"/>
+		<result column="print_time" property="printTime"/>
+		<result column="print_count" property="printCount"/>
+		<result column="sale_count" property="saleCount"/>
+		<result column="cate_id" property="cateId"/>
+		<result column="e_recommend" property="eRecommend"/>
+		<result column="src" property="src"/>
+		<result column="stock" property="stock"/>
+		<result column="edition" property="edition"/>
+		<result column="impression" property="impression"/>
+		<result column="format" property="format"/>
+		<result column="paper" property="paper"/>
+		<result column="packaging" property="packaging"/>
+		<result column="pagination" property="pagination"/>
+		<result column="recom" property="recom"/>
+		<result column="brief" property="brief"/>
+		<result column="about_author" property="aboutAuthor"/>
+		<result column="directory" property="directory"/>
+		<result column="media" property="media"/>
+		<association property="category" javaType="com.baizhi.ql.entity.Category">
+			<id column="Id1" property="id" />
+			<result column="cateName1" property="cateName"/>
+			<result column="count1" property="count"/>
+			<result column="parentId1" property="parentId"/>
+			<result column="levels1" property="levels"/>
+		</association>
+	</resultMap>
+	
+	<!-- 前台:查所有行数 -->
+	<select id="checkCount" resultType="Integer">
+		select count(*) from 
+		(select b.id,book_name,author,price,dd_price,company,publish_time,
+		       public_count,isbn,print_time,print_count,sale_count,
+		       cate_id,e_recommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author,directory,media,
+		       c.id,c.cate_name,c.parent_id,c.levels
+			from d_book b
+			join d_category c
+			on b.cate_id=c.id
+			where c.parent_id=#{fid}
+			<if test="sid!='' and sid!=null">
+				and c.id=#{sid}
+			</if>)
+	</select>
+	
+	
+	<!-- 前台:分页查 -->
+	<select id="checkByPage" resultMap="myBook2">
+		select * from (select tb1.*,rownum rn from 
+		(select b.id,book_name,author,price,dd_price,company,publish_time,
+		       public_count,isbn,print_time,print_count,sale_count,
+		       cate_id,e_recommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author,directory,media,
+		       c.id Id1,c.cate_name cateName1,c.parent_id parentId1,c.levels levels1
+			from d_book b
+			join d_category c
+			on b.cate_id=c.id
+			where c.parent_id=#{fid}
+			<if test="sid!='' and sid!=null">
+				and c.id=#{sid}
+			</if>)tb1 where rownum &lt;= #{pageNum}*#{pageCount})tb2 where rn>(#{pageNum}-1)*#{pageCount}
+	</select>
+	
+	<!-- 前台:根据二级类别id查询对应的图书 -->
+	<select id="checkBySecond" resultMap="myBook2">
+		select b.id,book_name,author,price,dd_price,company,publish_time,
+		       public_count,isbn,print_time,print_count,sale_count,
+		       cate_id,e_recommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author,directory,media,
+		       c.id Id1,c.cate_name cateName1,c.parent_id parentId1,c.levels levels1
+			from d_book b
+			join d_category c
+			on b.cate_id=c.id
+			where c.parent_id=#{fid}
+			<if test="sid!='' and sid!=null">
+				and c.id=#{sid}
+			</if>
+	</select>
+	
+	<!-- 根据id查一个包括所属类别 -->
+	<select id="checkOneCategory" parameterType="String" resultMap="myBook">
+		select b.id,book_name,author,price,dd_price,company,publish_time,
+		       public_count,isbn,print_time,print_count,sale_count,
+		       cate_id,e_recommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author,directory,media,c1.cate_name cateName1,c2.cate_name cateName2
+			from d_book b
+			join d_category c1
+			on b.cate_id = c1.id
+			join d_category c2
+			on c1.parent_id = c2.id
+			where b.id=#{id}
+	</select>
+	
+	<!-- 5.新书热卖8,只展示书名 -->
+	<select id="checkHotBoard" resultType="com.baizhi.ql.entity.Book">
+		<![CDATA[
+		select id,bookName,author,price,ddPrice,company,publishTime,
+		       publicCount,isbn,printTime,printCount,saleCount,
+		       cateId,eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,aboutAuthor,directory,media,
+		       rownum from
+		(select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book
+		order by sale_count desc,publish_time desc)tb1 where rownum<=8
+		]]>
+	</select>
+	
+	
+	<!-- 4.最新上架8,时间降序 -->
+	<select id="checkNew" resultType="com.baizhi.ql.entity.Book">
+		<![CDATA[
+		select id,bookName,author,price,ddPrice,company,publishTime,
+		       publicCount,isbn,printTime,printCount,saleCount,
+		       cateId,eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,aboutAuthor,directory,media,
+		       rownum from
+		(select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book
+		order by publish_time desc)tb1 where rownum<=8
+		]]>
+	</select>
+
+
+	<!-- 3.热销图书8,销量没有不展示 -->
+	<select id="checkHot" resultType="com.baizhi.ql.entity.Book">
+		<![CDATA[
+		select id,bookName,author,price,ddPrice,company,publishTime,
+		       publicCount,isbn,printTime,printCount,saleCount,
+		       cateId,eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,aboutAuthor,directory,media,
+		       rownum from
+		(select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book where sale_count>0
+		order by sale_count desc)tb1 where rownum<=8
+		]]>
+	</select>
+
+
+	<!-- 2.编辑推荐,随机生成2本书 -->
+	<select id="checkTwo" resultType="com.baizhi.ql.entity.Book">
+		select id,bookName,author,price,ddPrice,company,publishTime,
+		       publicCount,isbn,printTime,printCount,saleCount,
+		       cateId,eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,aboutAuthor,directory,media,
+		       rownum from
+		(select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book order by dbms_random.random())tb1 
+		where rownum &lt;=2	
+	</select>
+	<!-- 修改 -->
+	<update id="update" parameterType="com.baizhi.ql.entity.Book">
+		update d_book 
+			<set>
+				<if test="bookName!=null">book_name=#{bookName},</if>
+				<if test="author!=null">author=#{author},</if>
+				<if test="price!=null">price=#{price},</if>
+				<if test="ddPrice!=null">dd_price=#{ddPrice},</if>
+				<if test="company!=null">company=#{company},</if>
+				<if test="publishTime!=null">publish_time=#{publishTime},</if>
+				<if test="publicCount!=null">public_count=#{publicCount},</if>
+				<if test="isbn!=null">isbn=#{isbn},</if>
+				<if test="printTime!=null">print_time=#{printTime},</if>
+				<if test="printCount!=null">print_count=#{printCount},</if>
+				<if test="saleCount!=null">sale_count=#{saleCount},</if>
+				<if test="cateId!=null">cate_id=#{cateId},</if>
+				<if test="eRecommend!=null">e_recommend=#{eRecommend},</if>
+				<if test="src!=null">src=#{src},</if>
+				<if test="stock!=null">stock=#{stock},</if>
+				<if test="edition!=null">edition=#{edition},</if>
+				<if test="impression!=null">impression=#{impression},</if>
+				<if test="format!=null">format=#{format},</if>
+				<if test="paper!=null">paper=#{paper},</if>
+				<if test="packaging!=null">packaging=#{packaging},</if>
+				<if test="pagination!=null">pagination=#{pagination},</if>
+				<if test="recom!=null">recom=#{recom},</if>
+				<if test="brief!=null">brief=#{brief},</if>
+				<if test="aboutAuthor!=null">about_author=#{aboutAuthor},</if>
+				<if test="directory!=null">directory=#{directory},</if>
+				<if test="media!=null">media=#{media},</if>
+			</set>
+		       where id=#{id}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.baizhi.ql.entity.Book">
+		insert into d_book (id,book_name,author,price,dd_price,company,publish_time,
+		       public_count,isbn,print_time,print_count,sale_count,
+		       cate_id,e_recommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author,directory,media)
+		       values
+		       		(#{id,jdbcType=VARCHAR},#{bookName,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},
+		       		#{price,jdbcType=NUMERIC},#{ddPrice,jdbcType=NUMERIC},#{company,jdbcType=VARCHAR},#{publishTime,jdbcType=DATE},
+		       		#{publicCount,jdbcType=VARCHAR},#{isbn,jdbcType=VARCHAR},#{printTime,jdbcType=DATE},
+		       		#{printCount,jdbcType=VARCHAR},#{saleCount,jdbcType=NUMERIC},#{cateId,jdbcType=VARCHAR},
+		       		#{eRecommend,jdbcType=NUMERIC},#{src,jdbcType=VARCHAR},#{stock,jdbcType=NUMERIC},#{edition,jdbcType=VARCHAR},
+		       		#{impression,jdbcType=VARCHAR},#{format,jdbcType=VARCHAR},#{paper,jdbcType=VARCHAR},#{packaging,jdbcType=VARCHAR},
+		       		#{pagination,jdbcType=VARCHAR},#{recom,jdbcType=VARCHAR},#{brief,jdbcType=VARCHAR},#{aboutAuthor,jdbcType=VARCHAR},
+		       		#{directory,jdbcType=VARCHAR},#{media,jdbcType=VARCHAR})
+	</insert>
+	<!-- 查一个 -->
+	<select id="checkOne" resultType="com.baizhi.ql.entity.Book" parameterType="String">
+		select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book where id=#{id}
+	</select>
+	<!-- 查所有 -->
+	<select id="checkAll" resultType="com.baizhi.ql.entity.Book">
+		select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book
+	</select>
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+		delete from d_book where id = #{id}
+	</delete>
+	<!-- 模糊查询 -->
+	<select id="checkBy" parameterType="com.baizhi.ql.entity.Book" resultType="com.baizhi.ql.entity.Book">
+		select id,book_name bookName,author,price,dd_price ddPrice,company,publish_time publishTime,
+		       public_count publicCount,isbn,print_time printTime,print_count printCount,sale_count saleCount,
+		       cate_id cateId,e_recommend eRecommend,src,stock,edition,impression,format,paper,packaging,pagination,recom,
+		       brief,about_author aboutAuthor,directory,media
+		from d_book
+		<where>
+			<if test="key=='name'">
+				and book_name like #{term}
+			</if>
+			<if test="key=='author'">
+				and author like #{term}
+			</if>
+			<if test="key=='press'">
+				and company like #{term}
+			</if>
+		
+		</where>
+	</select>
+</mapper>

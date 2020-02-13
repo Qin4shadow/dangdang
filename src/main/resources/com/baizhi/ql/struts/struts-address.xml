@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<include file="com/baizhi/ql/struts/struts-order.xml"></include>
+	<package name="address" extends="struts-default" namespace="/address">
+		<action name="*" class="com.baizhi.ql.action.AddressAction" method="{1}">
+			<!-- 根据用户id查所有 -->
+			<result name="checkAll" >/front/order/address_form.jsp</result>
+			<!-- 查一个 -->
+			<result name="checkOne" type="chain" >checkAll</result>
+			<!-- 下一步进行判断是修改还是添加 -->
+			<result name="next" type="redirectAction">
+				<param name="namespace">/order</param>
+				<param name="actionName">add</param>
+			</result>
+		</action>
+	
+	</package>
+
+</struts>

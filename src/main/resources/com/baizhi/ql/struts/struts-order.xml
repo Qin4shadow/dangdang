@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<package name="order" extends="Interceptor" namespace="/order">
+		<action name="*" class="com.baizhi.ql.action.OrderAction" method="{1}">
+			<!-- 使用配置的拦截器 -->
+			<interceptor-ref name="myStack"/>
+			
+			<!-- 查所有 -->
+			<result name="checkAll" >/back/order/show.jsp</result>
+			<!-- 添加到两个订单表 -->
+			<result name="add" >/pay.jsp</result>
+			<!-- 修改支付状态 -->
+			<result name="update" >/front/order/order_ok.jsp</result>
+		</action>
+	
+	</package>
+
+</struts>

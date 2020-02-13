@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<!-- 引入struts-admin.xml-->
+	<include file="com/baizhi/ql/struts/struts-admin.xml" />
+	<!-- 引入struts-category.xml-->
+	<include file="com/baizhi/ql/struts/struts-category.xml" />
+	<!-- 引入struts-book.xml-->
+	<include file="com/baizhi/ql/struts/struts-book.xml" />
+	<!-- 引入struts-buycar.xml-->
+	<include file="com/baizhi/ql/struts/struts-buycar.xml" />
+	<!-- 引入struts-user.xml-->
+	<include file="com/baizhi/ql/struts/struts-user.xml" />
+	<!-- 引入struts-address.xml-->
+	<include file="com/baizhi/ql/struts/struts-address.xml" />
+	<!-- 引入struts-order.xml-->
+	<include file="com/baizhi/ql/struts/struts-order.xml" />
+	<!-- 引入struts-item.xml-->
+	<include file="com/baizhi/ql/struts/struts-item.xml" />
+	
+	<package name="Interceptor" extends="struts-default" >
+	
+		<!-- 定义拦截器 -->
+		<interceptors>
+			<!-- 配置拦截器类 -->
+			<interceptor name="AdminInterceptor" class="com.baizhi.ql.interceptor.AdminInterceptor">
+					
+					<!-- 拦截哪些方法 -->
+					<param name="includeMethods">checkAll</param> 
+					
+					<!-- 排除哪些方法 --> 
+					<!-- <param name="excludeMethods">queryById,update</param>  -->
+			</interceptor>
+		
+			<!-- 配置拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="AdminInterceptor"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 配置一个全局跳转页面 -->
+		<global-results>
+			<result name="adminLogin">/back/log.jsp</result>
+		</global-results>
+	</package>
+	
+</struts>

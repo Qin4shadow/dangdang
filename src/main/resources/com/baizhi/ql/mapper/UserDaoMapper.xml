@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ql.dao.UserDao">
+	<!-- 前台用户:根据邮箱查一个，实现用户登陆 -->
+	<select id="loginUser" parameterType="String" resultType="com.baizhi.ql.entity.User">
+		select id,nick_name nickName,email,password,status,regist_time registTime,salt,code 
+		from d_user where email=#{email,jdbcType=VARCHAR}
+	</select>
+	<!-- 前台用户:注册 -->
+	<select id="insertOne" parameterType="com.baizhi.ql.entity.User" >
+		insert into d_user values (#{id},#{nickName},#{email},#{password},#{status},#{registTime},#{salt},#{code,jdbcType=VARCHAR})
+	</select>
+	<!-- 前台用户:修改 -->
+	<update id="updateOne" parameterType="com.baizhi.ql.entity.User">
+		update d_user 
+			<set>
+				<if test="nickName!=null">nick_name=#{nickName},</if>
+				<if test="email!=null">email=#{email},</if>
+				<if test="password!=null">password=#{password},</if>
+				<if test="status!=null">status=#{status},</if>
+				<if test="registTime!=null">regist_time=#{registTime},</if>
+				<if test="salt!=null">salt=#{salt},</if>
+				<if test="code!=null">code=#{code},</if>
+			</set>
+		       where id=#{id}
+	</update>
+	<!-- 后台用户:查所有 -->
+	<select id="checkAll" resultType="com.baizhi.ql.entity.User">
+		select id,nick_name nickName,email,password,status,regist_time registTime,salt,code 
+		from d_user
+	</select>
+	<!-- 后台用户:查一个 -->
+	<select id="checkOne" parameterType="String" resultType="com.baizhi.ql.entity.User">
+		select id,nick_name nickName,email,password,status,regist_time registTime,salt,code 
+		from d_user where id=#{id}
+	</select>
+</mapper>

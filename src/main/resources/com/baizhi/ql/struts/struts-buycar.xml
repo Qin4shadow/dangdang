@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<include file="com/baizhi/ql/struts/struts-book.xml"></include>
+	<package name="buycar" extends="struts-default" namespace="/buycar">
+		<action name="*" class="com.baizhi.ql.action.BuyCarAction" method="{1}">
+			<!-- 购物车:添加图书到购物车 -->
+			<result name="addBuyCar" type="redirectAction">showBuyCar</result>
+			<!-- 购物车:查看购物车 -->
+			<result name="showBuyCar" >/front/cart/cart_list.jsp</result>
+			<!-- 购物车:修改数量 -->
+			<result name="update" type="redirectAction">showBuyCar</result>
+			<!-- 购物车:修改状态 -->
+			<result name="delete" type="redirectAction">showBuyCar</result>
+			<!-- 购物车:恢复状态 -->
+			<result name="recover" type="redirectAction">showBuyCar</result>
+		</action>
+	
+	</package>
+
+</struts>

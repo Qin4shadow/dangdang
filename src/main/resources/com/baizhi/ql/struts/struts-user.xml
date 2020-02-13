@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<include file="com/baizhi/ql/struts/struts-book.xml"></include>
+	<include file="com/baizhi/ql/struts/struts-address.xml"></include>
+	<package name="duser" extends="Interceptor" namespace="/duser">
+		<action name="*" class="com.baizhi.ql.action.UserAction" method="{1}">
+			<!-- 使用配置的拦截器 -->
+			<interceptor-ref name="myStack"/>
+			
+			<!-- 登陆成功跳转 -->
+			<result name="loginSuccess" type="redirectAction">
+				<param name="namespace">/book</param>
+				<param name="actionName">main</param>
+			</result>
+			<!-- 前台:邮箱未激活-->
+			<result name="emailError" type="redirectAction">random</result>
+			<!-- 登陆失败跳转 -->
+			<result name="loginError" >/front/user/login_form.jsp</result>
+			<!-- 前台:下订单未登录跳转至登陆方法-->
+			<result name="loginCheck" type="redirect">/front/user/login_form.jsp</result>
+			<!-- 前台:下订单以登录跳转至查询地址方法-->
+			<result name="queryAddress" type="redirectAction">
+				<param name="namespace">/address</param>
+				<param name="actionName">checkAll</param>
+			</result>
+			<!-- 安全退出 -->
+			<result name="logout" >/front/user/login_form.jsp</result>
+			<!-- 前台用户:注册 -->
+			<result name="insertOneSuccess" type="redirectAction">random</result>
+			<result name="insertOneError" >/front/user/register_form.jsp</result>
+			<!-- 前台:生成邮箱随机数 -->
+			<result name="inEmailCode" >/front/user/verify_form.jsp</result>
+			<!-- 邮箱验证码的对比 -->
+			<result name="registOk" >/front/user/register_ok.jsp</result>
+			<result name="email" type="redirectAction">random</result>
+			<!-- 后台用户:查所有 -->
+			<result name="checkAll" >/back/user/show.jsp</result>
+			<!-- 后台用户:查所有，更改状态 -->
+			<result name="checkAllUpdate" type="redirectAction">checkAll</result>
+		</action>
+	
+	</package>
+
+</struts>

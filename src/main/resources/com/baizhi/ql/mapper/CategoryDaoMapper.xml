@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ql.dao.CategoryDao">
+	<!-- 手动映射 -->
+	<resultMap type="com.baizhi.ql.entity.Category" id="myCategory" >
+		<id column="Id1" property="id" />
+		<result column="cateName1" property="cateName"/>
+		<result column="count1" property="count"/>
+		<result column="parentId1" property="parentId"/>
+		<result column="levels1" property="levels"/>
+		<association property="category" javaType="com.baizhi.ql.entity.Category">
+			<id column="Id2" property="id" />
+			<result column="cateName2" property="cateName"/>
+			<result column="count2" property="count"/>
+			<result column="parentId2" property="parentId"/>
+			<result column="levels2" property="levels"/>
+		</association>
+	</resultMap>
+	<!-- 手动映射2 -->
+	<resultMap type="com.baizhi.ql.entity.Category" id="myCategory2" >
+		<id column="Id1" property="id" />
+		<result column="cateName1" property="cateName"/>
+		<result column="count1" property="count"/>
+		<result column="parentId1" property="parentId"/>
+		<result column="levels1" property="levels"/>
+		<collection property="secList" ofType="com.baizhi.ql.entity.Category" >
+			<id column="IId2" property="id" />
+			<result column="CcateName2" property="cateName"/>
+			<result column="Ccount2" property="count"/>
+			<result column="PparentId2" property="parentId"/>
+			<result column="Llevels2" property="levels"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 前台:点击分类浏览 -->
+	<select id="checkCategory" resultMap="myCategory2" parameterType="String">
+		select d1.id Id1,d1.cate_name cateName1,d1.count count1,d1.parent_id parentId1,d1.levels levels1,
+		       d2.id IId2,d2.cate_name CcateName2,d2.count Ccount2,d2.parent_id PparentId2,d2.levels Llevels2
+			   from d_category d1 
+			   join d_category d2 
+			   on d1.id=d2.parent_id
+		where d1.id=#{fid}
+	</select>
+	
+	<!-- 前台:查询类别 -->
+	<select id="checkCate" resultMap="myCategory2">
+		select d1.id Id1,d1.cate_name cateName1,d1.count count1,d1.parent_id parentId1,d1.levels levels1,
+		d2.id IId2,d2.cate_name CcateName2,d2.count Ccount2,d2.parent_id PparentId2,d2.levels Llevels2
+		from d_category d1
+		left join d_category d2
+		on d1.id=d2.parent_id
+		where d1.levels=1
+	</select>
+	<!-- 查所有 -->
+	<select id="checkAll" resultMap="myCategory">
+		select d1.id Id1,d1.cate_name cateName1,d1.count count1,d1.parent_id parentId1,d1.levels levels1,
+		d2.id Id2,d2.cate_name cateName2,d2.count count2,d2.parent_id parentId2,d2.levels levels2
+		from d_category d1
+		left join d_category d2
+		on d1.parent_id=d2.id
+	</select>
+	<!-- 删除 -->
+	<delete id="deletOne" parameterType="String">
+		delete from d_category where id = #{id}
+	</delete>
+	<!-- 添加类别 -->
+	<insert id="insertCate" parameterType="com.baizhi.ql.entity.Category">
+		insert into d_category
+		values (#{id},#{cateName},#{count},#{parentId,jdbcType=VARCHAR},#{levels})
+	</insert>
+	<!-- 后台:查询某个一级类别下是否有二级类别  -->
+	<select id="queryByCount" parameterType="String" resultType="Integer">
+		select count(*) from d_category where parent_id=#{id}
+	</select>
+	<!-- 查所有一级类别 -->
+	<select id="checkFirst" resultMap="myCategory">
+		select id Id1,cate_name cateName1,count count1,parent_id parentId1,levels levels1
+		from d_category where levels = #{levels}
+	</select>
+</mapper>

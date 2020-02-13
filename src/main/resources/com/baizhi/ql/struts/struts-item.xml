@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<package name="item" extends="struts-default" namespace="/item">
+		<action name="*" class="com.baizhi.ql.action.ItemAction" method="{1}">
+			<!-- 根据订单id查 -->
+			<result name="checkByOrder" >/back/order/detail.jsp</result>
+		</action>
+	
+	</package>
+
+</struts>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ql.dao.OrderDao">
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.baizhi.ql.entity.Order">
+		insert into d_order values 
+		(#{id},#{orderNumber},#{orderTimes},#{addrUser},#{addrName},#{totalPrice},#{status},#{addrId},#{userId})
+	</insert>
+	<!-- 查所有  -->
+	<select id="checkAll" resultType="com.baizhi.ql.entity.Order">
+		select id,order_number orderNumber,order_times orderTimes,
+		addr_user addrUser,addr_name addrName,total_price totalPrice,
+		status,addr_id addrId,user_id userId
+		from d_order
+	</select>
+	<!-- 修改 -->
+	<update id="update" parameterType="com.baizhi.ql.entity.Order">
+		update d_order set status=#{status} where id=#{id}
+	</update>
+	<!-- 查一个  -->
+	<select id="checkOne" parameterType="String" resultType="com.baizhi.ql.entity.Order">
+		select id,order_number orderNumber,order_times orderTimes,
+		addr_user addrUser,addr_name addrName,total_price totalPrice,
+		status,addr_id addrId,user_id userId
+		from d_order where id=#{id}
+	</select>
+	
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ql.dao.ItemDao">
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.baizhi.ql.entity.Item">
+		insert into d_item values 
+		(#{id},#{bookName},#{bookSrc},#{price},#{count},#{amount},#{bookId},#{orderId})
+	</insert>
+	
+	<!-- 根据订单id查  -->
+	<select id="checkByOrder" parameterType="String" resultType="com.baizhi.ql.entity.Item">
+		select id,book_name bookName,book_src bookSrc,price,count,amount,
+		book_id bookId,order_id orderId
+		from d_item where order_id=#{orderId}
+	</select>
+	
+</mapper>

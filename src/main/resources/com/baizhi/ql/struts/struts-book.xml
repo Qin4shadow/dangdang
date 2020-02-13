@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<package name="book" extends="Interceptor" namespace="/book">
+		<action name="*" class="com.baizhi.ql.action.BookAction" method="{1}">
+			
+			<!-- 使用配置的拦截器 -->
+			<interceptor-ref name="myStack"/>
+			
+			<!-- 后台:查所有 -->
+			<result name="checkAllS" >/back/book/show.jsp</result>
+			<!-- 后台:删除 -->
+			<result name="deleteS" type="redirectAction">checkAll</result>
+			<!-- 后台:模糊查 -->
+			<result name="checkByS">/back/book/show.jsp</result>
+			<!-- 后台:查一个 -->
+			<result name="checkOneS" >/back/book/update.jsp</result>
+			<!-- 后台:添加 -->
+			<result name="insertS" type="redirectAction">checkAll</result>
+			<!-- 后台:添加2 -->
+			<result name="insert2S" >/back/book/add.jsp</result>
+			<!-- 后台:修改 -->
+			<result name="updateS" type="redirectAction" >checkAll</result>
+			<!-- 前台:主页面main.jsp -->
+			<result name="main" >/front/main/main.jsp</result>
+			<!-- 前台:根据id查一个包括所属类别 -->
+			<result name="bookOne" >/front/main/book_detail.jsp</result>
+			<!-- 前台:添加图书到购物车 -->
+			<result name="addBuyCar" type="redirectAction" >main</result>
+			<!-- 前台:查看购物车 -->
+			<result name="showBuyCar" >/front/cart/cart_list.jsp</result>
+		</action>
+	
+	</package>
+
+</struts>

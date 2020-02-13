@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<package name="cate" extends="Interceptor" namespace="/cate">
+		<action name="*" class="com.baizhi.ql.action.CategoryAction" method="{1}">
+			<!-- 使用配置的拦截器 -->
+			<interceptor-ref name="myStack"/>
+			
+			<!-- 查所有 -->
+			<result name="checkSuccess">/back/category/show.jsp</result>
+			<!-- 添加类别 -->
+			<result name="insertS" type="redirectAction">checkAll</result>
+			<!-- 查所有一级类别-->
+			<result name="checkFirstS" >/back/category/add-second.jsp</result>
+			<!-- 删除 -->
+			<result name="deleteS" type="chain">checkAll</result>
+			<!-- 前台:点击分类浏览 -->
+			<result name="checkCategoryS" >/front/main/book_list.jsp</result>
+			<!-- 前台:点击分类浏览,分页查图书 -->
+			<result name="checkCategory2S" >/front/main/book_list.jsp</result>
+		</action>
+	
+	</package>
+
+</struts>
